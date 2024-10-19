@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+    env_file:
+      - ./frontend/.env
+    container_name: frontend
+    ports:
+      - '5173:5173'
+
+  user-service:
+    build:
+      context: ./services/user-service
+    env_file:
+      - ./services/user-service/.env
+    container_name: user-service
+    ports:
+      - '5001:5000'
+    environment:
+      - MONGO_URI=value
+
+  appointment-service:
+    build:
+      context: ./services/appointment-service
+    env_file:
+      - ./services/appointment-service/.env
+    container_name: appointment-service
+    ports:
+      - '5002:5000'
+
+  chatbot-service:
+    build:
+      context: ./services/chatbot-service
+    env_file:
+      - ./services/chatbot-service/.env
+    container_name: chatbot-service
+    ports:
+      - '5003:5000'
