@@ -21,8 +21,7 @@ const protect = asyncHandler(
         ) as JwtPayload;
 
         const { data: user } = await axios.get(
-          // ! Change
-          `http://localhost:5001/api/users${decoded.userId}`
+          `${process.env.USER_SERVICE_URL}/api/users${decoded.userId}`
         );
 
         if (!user) {

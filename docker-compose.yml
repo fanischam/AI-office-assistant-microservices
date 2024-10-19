@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   frontend:
     build:
@@ -18,8 +16,6 @@ services:
     container_name: user-service
     ports:
       - '5001:5000'
-    environment:
-      - MONGO_URI=value
 
   appointment-service:
     build:
