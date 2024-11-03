@@ -87,7 +87,7 @@ const AppointmentsScreen: React.FC = () => {
   const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this appointment?')) {
       try {
-        await deleteAppointment({ id }).unwrap();
+        await deleteAppointment(id).unwrap();
         toast.success('Appointment deleted successfully');
         refetch();
       } catch (error: any) {

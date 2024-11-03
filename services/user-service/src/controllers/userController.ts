@@ -61,6 +61,16 @@ const logoutUser = asyncHandler(async (req: Request, res: Response) => {
   res.status(200).json({ message: 'Logged out successfully' });
 });
 
+const getUser = asyncHandler(async (req: Request, res: Response) => {
+  const user = await User.findById(req.params.id);
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
 const getAllUsers = asyncHandler(async (req: Request, res: Response) => {
   const users = await User.find({});
   res.json(users);
@@ -108,6 +118,7 @@ export {
   registerUser,
   logoutUser,
   getAllUsers,
+  getUser,
   updateUserProfile,
   deleteUserProfile,
 };

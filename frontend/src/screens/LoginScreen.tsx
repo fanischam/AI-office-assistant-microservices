@@ -75,12 +75,9 @@ const LoginScreen: React.FC = () => {
 
       <Row className='py-3'>
         <Col>
-          New Customer?{' '}
-          <Link
-            to={redirect ? `/redirect?redirect=${redirect}` : '/redirect'}
-            className='text-decoration-none'
-          >
-            Register here
+          New User?{' '}
+          <Link to={'/register'} className='text-decoration-none'>
+            Register
           </Link>
         </Col>
       </Row>
