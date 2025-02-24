@@ -13,7 +13,6 @@ const processPrompt = asyncHandler(
         return;
       }
 
-      // TODO: Replace this part with calling to the flask service
       const response = await processAppointmentPrompt(
         prompt,
         req.user._id,

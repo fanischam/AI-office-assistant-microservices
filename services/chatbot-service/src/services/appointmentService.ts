@@ -59,7 +59,7 @@ const createAppointment = async (
 ) => {
   try {
     const response = await axios.post(
-      'http://localhost:5002/api/appointments',
+      `${process.env.APPOINTMENT_SERVICE_URL}/api/appointments`,
       {
         title,
         participant,
@@ -69,8 +69,9 @@ const createAppointment = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${jwtToken}`,
+          Cookie: `jwt=${jwtToken}`,
         },
+        withCredentials: true,
       }
     );
     return {
@@ -93,15 +94,18 @@ const getAppointments = async (
   jwtToken: string
 ) => {
   try {
-    const response = await axios.get('http://localhost:5002/api/appointments', {
-      headers: {
-        Authorization: `Bearer ${jwtToken}`, // Include the JWT token here
-      },
-      params: {
-        userId,
-        period, // Pass the period as a query parameter
-      },
-    });
+    const response = await axios.get(
+      `${process.env.APPOINTMENT_SERVICE_URL}/api/appointments`,
+      {
+        headers: {
+          Cookie: `jwt=${jwtToken}`,
+        },
+        params: {
+          userId,
+          period,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error(`Error fetching appointments for ${period}:`, error);
