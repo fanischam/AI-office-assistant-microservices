@@ -1,8 +1,7 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import asyncHandler from '../middleware/asyncHandler';
 import Appointment from '../models/appointmentModel';
 import { CustomRequest } from '../middleware/authMiddleware';
-import mongoose from 'mongoose';
 
 const getAppointments = asyncHandler(
   async (req: CustomRequest, res: Response) => {

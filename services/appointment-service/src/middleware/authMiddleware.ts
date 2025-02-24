@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import asyncHandler from './asyncHandler';
-import axios from 'axios';
 
 export interface CustomRequest extends Request {
   user?: any;

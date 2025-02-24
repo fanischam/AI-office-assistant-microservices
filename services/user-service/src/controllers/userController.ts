@@ -1,10 +1,10 @@
 import asyncHandler from '../middleware/asyncHandler';
 import generateToken from '../utils/generateToken';
 import User from '../models/userModel';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { CustomRequest } from '../middleware/authMiddleware';
 
-const loginUser = asyncHandler(async (req: Request, res: Response) => {
+const loginUser = asyncHandler(async (req: CustomRequest, res: Response) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
@@ -26,7 +26,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-const registerUser = asyncHandler(async (req: Request, res: Response) => {
+const registerUser = asyncHandler(async (req: CustomRequest, res: Response) => {
   const { name, email, password } = req.body;
 
   const userExists = await User.findOne({ email });
@@ -56,12 +56,12 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-const logoutUser = asyncHandler(async (req: Request, res: Response) => {
+const logoutUser = asyncHandler(async (req: CustomRequest, res: Response) => {
   res.clearCookie('jwt');
   res.status(200).json({ message: 'Logged out successfully' });
 });
 
-const getUser = asyncHandler(async (req: Request, res: Response) => {
+const getUser = asyncHandler(async (req: CustomRequest, res: Response) => {
   const user = await User.findById(req.params.id);
   if (user) {
     res.json(user);
@@ -71,7 +71,7 @@ const getUser = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-const getAllUsers = asyncHandler(async (req: Request, res: Response) => {
+const getAllUsers = asyncHandler(async (req: CustomRequest, res: Response) => {
   const users = await User.find({});
   res.json(users);
 });
