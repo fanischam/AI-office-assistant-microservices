@@ -19,6 +19,7 @@ app.use(cookieParser());
 const allowedOrigins = [
   process.env.FRONTEND_SERVICE,
   process.env.FRONTEND_LOCAL,
+  process.env.CHATBOT_SERVICE,
 ];
 
 app.use(
@@ -30,6 +31,8 @@ app.use(
         callback(new Error('Not allowed by CORS'));
       }
     },
+    allowedHeaders: ['Content-Type', 'Cookie'],
+    exposedHeaders: ['Set-Cookie'],
     credentials: true,
   })
 );

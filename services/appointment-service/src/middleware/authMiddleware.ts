@@ -9,43 +9,22 @@ export interface CustomRequest extends Request {
 
 const protect = asyncHandler(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-    let token;
+    const token = req.cookies.jwt;
 
-    token = req.cookies.jwt;
-
-    if (token) {
-      try {
-        const decoded = jwt.verify(
-          token,
-          process.env.JWT_SECRET!
-        ) as JwtPayload;
-
-        const { data: user } = await axios.get(
-          `${process.env.USER_SERVICE_URL}/api/users/${decoded.userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${req.cookies.jwt}`,
-            },
-          }
-        );
-
-        if (!user) {
-          res.status(401);
-          throw new Error('Not authorized, user not found');
-        }
-
-        // Attach the user object to the request
-        req.user = user;
-
-        next();
-      } catch (error) {
-        console.error(error);
-        res.status(401);
-        throw new Error('Not authorized, token failed');
-      }
-    } else {
+    if (!token) {
       res.status(401);
       throw new Error('Not authorized, no token');
+    }
+
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+      req.user = { _id: decoded.userId };
+
+      next();
+    } catch (error) {
+      console.error(error);
+      res.status(401);
+      throw new Error('Not authorized, token failed');
     }
   }
 );
