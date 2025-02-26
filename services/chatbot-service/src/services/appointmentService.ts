@@ -46,14 +46,13 @@ const getAppointments = async (
 ) => {
   try {
     const response = await axios.get(
-      `${process.env.APPOINTMENT_SERVICE_URL}/api/appointments`,
+      `${process.env.APPOINTMENT_SERVICE_URL}/api/appointments/period/${period}`,
       {
         headers: {
           Cookie: `jwt=${jwtToken}`,
         },
         params: {
           userId,
-          period,
         },
       }
     );

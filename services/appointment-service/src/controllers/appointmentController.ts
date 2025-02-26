@@ -2,6 +2,7 @@ import { Response } from 'express';
 import asyncHandler from '../middleware/asyncHandler';
 import Appointment from '../models/appointmentModel';
 import { CustomRequest } from '../middleware/authMiddleware';
+import { getDateRangeForPeriod } from '../utils/appointmentUtils';
 
 const getAppointments = asyncHandler(
   async (req: CustomRequest, res: Response) => {
@@ -23,6 +24,48 @@ const getAppointmentById = asyncHandler(
     } else {
       res.status(404).json({ message: 'Appointment not found' });
     }
+  }
+);
+
+const getAppointmentsByPeriod = asyncHandler(
+  async (req: CustomRequest, res: Response) => {
+    const userId = req.user._id;
+    const { period } = req.params;
+    const userLimit = Number(req.query.limit);
+
+    const {
+      start,
+      end,
+      sort,
+      limit: defaultLimit,
+    } = getDateRangeForPeriod(period);
+    const limit = userLimit || defaultLimit || 10;
+
+    const query: any = { user: userId };
+
+    if (start || end) {
+      query.date = {};
+      if (start) query.date.$gte = start;
+      if (end) query.date.$lt = end;
+    }
+
+    let queryBuilder = Appointment.find(query);
+
+    if (sort) {
+      queryBuilder = queryBuilder.sort({ date: 1 });
+    }
+
+    if (period === 'next' || userLimit) {
+      queryBuilder = queryBuilder.limit(limit);
+    }
+
+    const appointments = await queryBuilder;
+
+    res.json({
+      period,
+      count: appointments.length,
+      appointments,
+    });
   }
 );
 
@@ -155,6 +198,7 @@ const deleteAppointment = asyncHandler(
 export {
   getAppointments,
   getAppointmentById,
+  getAppointmentsByPeriod,
   createAppointment,
   createAppointmentDirect,
   updateAppointment,

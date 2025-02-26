@@ -1,5 +1,6 @@
 import { getLangChainResponse } from '../middleware/langChainMiddleware';
 import { extractAppointmentDetails } from '../utils/appointmentUtils';
+import { PERIOD_PATTERNS } from '../utils/constants';
 import { createAppointment, getAppointments } from './appointmentService';
 
 export const processAppointmentPrompt = async (
@@ -39,26 +40,17 @@ export const processAppointmentPrompt = async (
     }
   }
 
-  const periodMapping = [
-    { keywords: ['appointments', 'today'], period: 'today' },
-    { keywords: ['appointments', 'tomorrow'], period: 'tomorrow' },
-    { keywords: ['appointments', 'this', 'week'], period: 'this-week' },
-    { keywords: ['appointments', 'next', 'week'], period: 'next-week' },
-  ];
-
-  const includesKeywords = (keywords: string[], text: string) => {
-    return keywords.every((keyword) => text.toLowerCase().includes(keyword));
-  };
-
-  for (const { keywords, period } of periodMapping) {
-    if (includesKeywords(keywords, prompt)) {
+  for (const { regex, period, description } of PERIOD_PATTERNS) {
+    if (regex.test(prompt)) {
       const appointments = await getAppointments(userId, period, jwtToken);
-      return { appointments };
+      return {
+        appointments: {
+          ...appointments,
+          description: description || `appointments for ${period}`,
+        },
+      };
     }
   }
 
-  return {
-    response: response,
-    // 'My purpose is only to book new appointments for you and provide you with details about your appointments for today, tomorrow, this week, or next week. For now, I do not have other functionalities.',
-  };
+  return { response };
 };

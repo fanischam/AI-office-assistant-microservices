@@ -4,6 +4,7 @@ import {
   deleteAppointment,
   getAppointmentById,
   getAppointments,
+  getAppointmentsByPeriod,
   updateAppointment,
 } from '../controllers/appointmentController';
 import protect from '../middleware/authMiddleware';
@@ -14,6 +15,9 @@ router
   .route('/')
   .get(protect, getAppointments)
   .post(protect, createAppointment);
+
+router.route('/period/:period').get(protect, getAppointmentsByPeriod);
+
 router
   .route('/:id')
   .get(protect, getAppointmentById)

@@ -33,15 +33,31 @@ export const processUserMessage = async (
     };
 
     if (response.appointments) {
-      botMessage.text = 'Your appointments are: ';
-      const appointments = response.appointments;
-      appointments.forEach((appointment: Appointment) => {
-        const { title, participant, participantPhoneNumber, date } =
-          appointment;
-        botMessage.text += `${title} appointment with ${participant} on ${formatDate(
-          date
-        )}. ${participant}'s contact phone number is ${participantPhoneNumber}.`;
-      });
+      const appointments = Array.isArray(response.appointments)
+        ? response.appointments
+        : response.appointments.appointments || [];
+
+      if (appointments.length === 0) {
+        botMessage.text = 'You have no appointments for this period.';
+      } else {
+        const periodDescription = response.appointments.description
+          ? `Here are your ${response.appointments.description}:\n\n`
+          : 'Your appointments are:\n\n';
+
+        botMessage.text = periodDescription;
+
+        const appointmentsList = appointments
+          .map((appointment: Appointment) => {
+            const { title, participant, participantPhoneNumber, date } =
+              appointment;
+            return `• ${title} appointment with ${participant} on ${formatDate(
+              date
+            )}.\n  Phone: ${participantPhoneNumber}`;
+          })
+          .join('\n\n');
+
+        botMessage.text += appointmentsList;
+      }
     } else {
       botMessage.text = response.message || response.error || response.response;
     }
@@ -54,7 +70,8 @@ export const processUserMessage = async (
     const botMessage: Message = {
       text:
         error.message ||
-        'There must be something wrong with your appointment details, please make sure that you specify a participant, his phone number, the reason of the appointment and the date in a format like Tuesday 20th of August at 11:00.',
+        'There must be something wrong with your appointment details, please make sure that you specify a participant,' +
+          'his phone number, the reason of the appointment and the date in a format like Tuesday 20th of August at 11:00.',
       sender: 'bot',
     };
 
