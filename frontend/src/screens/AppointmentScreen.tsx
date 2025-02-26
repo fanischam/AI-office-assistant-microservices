@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Form, Modal } from 'react-bootstrap';
+import { Table, Button, Form, Modal, Pagination } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import {
   useGetAppointmentsQuery,
@@ -19,11 +19,13 @@ interface Appointment {
 }
 
 const AppointmentsScreen: React.FC = () => {
+  const [page, setPage] = useState(1);
   const {
-    data: appointments,
+    data: paginatedData,
     isLoading,
     refetch,
-  } = useGetAppointmentsQuery({});
+  } = useGetAppointmentsQuery(page);
+
   const [createAppointment] = useCreateAppointmentMutation();
   const [updateAppointment] = useUpdateAppointmentMutation();
   const [deleteAppointment] = useDeleteAppointmentMutation();
@@ -33,6 +35,10 @@ const AppointmentsScreen: React.FC = () => {
   const [currentAppointment, setCurrentAppointment] = useState<
     Partial<Appointment>
   >({});
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
   const handleShowModal = (
     type: 'create' | 'edit',
@@ -52,7 +58,7 @@ const AppointmentsScreen: React.FC = () => {
 
   useEffect(() => {
     refetch();
-  }, [refetch]);
+  }, [refetch, page]);
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -121,7 +127,7 @@ const AppointmentsScreen: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {appointments?.map((appointment: Appointment) => (
+            {paginatedData?.appointments?.map((appointment: Appointment) => (
               <tr key={appointment._id}>
                 <td>{appointment.title}</td>
                 <td>{appointment.participant}</td>
@@ -146,6 +152,40 @@ const AppointmentsScreen: React.FC = () => {
             ))}
           </tbody>
         </Table>
+      )}
+
+      {!isLoading && paginatedData && (
+        <div className='d-flex justify-content-center mt-4'>
+          <Pagination>
+            <Pagination.First
+              onClick={() => handlePageChange(1)}
+              disabled={paginatedData.currentPage === 1}
+            />
+            <Pagination.Prev
+              onClick={() => handlePageChange(paginatedData.currentPage - 1)}
+              disabled={paginatedData.currentPage === 1}
+            />
+
+            {[...Array(paginatedData.totalPages)].map((_, idx) => (
+              <Pagination.Item
+                key={idx + 1}
+                active={idx + 1 === paginatedData.currentPage}
+                onClick={() => handlePageChange(idx + 1)}
+              >
+                {idx + 1}
+              </Pagination.Item>
+            ))}
+
+            <Pagination.Next
+              onClick={() => handlePageChange(paginatedData.currentPage + 1)}
+              disabled={paginatedData.currentPage === paginatedData.totalPages}
+            />
+            <Pagination.Last
+              onClick={() => handlePageChange(paginatedData.totalPages)}
+              disabled={paginatedData.currentPage === paginatedData.totalPages}
+            />
+          </Pagination>
+        </div>
       )}
 
       <Modal show={showModal} onHide={handleCloseModal}>

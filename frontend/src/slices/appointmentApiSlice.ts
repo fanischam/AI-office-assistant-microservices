@@ -1,6 +1,22 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { APPOINTMENTS_URL } from '../constants';
 
+interface Appointment {
+  _id: string;
+  title: string;
+  participant: string;
+  participantPhoneNumber: number;
+  date: string;
+  user: string;
+}
+
+interface PaginatedResponse {
+  appointments: Appointment[];
+  currentPage: number;
+  totalPages: number;
+  totalAppointments: number;
+}
+
 export const appointmentApiSlice = createApi({
   reducerPath: 'appointmentApi',
   baseQuery: fetchBaseQuery({
@@ -9,9 +25,13 @@ export const appointmentApiSlice = createApi({
   }),
   tagTypes: ['Appointment'],
   endpoints: (builder) => ({
-    getAppointments: builder.query({
-      query: () => ({
+    getAppointments: builder.query<PaginatedResponse, number | void>({
+      query: (page = 1) => ({
         url: '/',
+        params: {
+          page,
+          limit: 15,
+        },
       }),
     }),
     createAppointment: builder.mutation({

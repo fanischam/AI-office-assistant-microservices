@@ -6,9 +6,23 @@ import { getDateRangeForPeriod } from '../utils/appointmentUtils';
 
 const getAppointments = asyncHandler(
   async (req: CustomRequest, res: Response) => {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 15;
+    const skip = (page - 1) * limit;
     const userId = req.user._id;
-    const appointments = await Appointment.find({ user: userId });
-    res.json(appointments);
+    const appointments = await Appointment.find({ user: userId })
+      .sort({ date: 1 })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Appointment.countDocuments({ user: userId });
+
+    res.json({
+      appointments,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalAppointments: total,
+    });
   }
 );
 
