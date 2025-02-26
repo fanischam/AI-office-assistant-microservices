@@ -60,6 +60,16 @@ export const PERIOD_PATTERNS = [
     description: 'appointments for next week',
   },
   {
+    regex: /\b(?:appointments|meetings|schedule)(?:.+?)?\bthis\s+month\b/i,
+    period: 'this-month',
+    description: 'appointments for this month',
+  },
+  {
+    regex: /\b(?:appointments|meetings|schedule)(?:.+?)?\bnext\s+month\b/i,
+    period: 'next-month',
+    description: 'appointments for next month',
+  },
+  {
     regex:
       /\b(?:next|upcoming|coming|following)(?:.+?)?\b(?:appointments|meetings|schedule)\b/i,
     period: 'next',
