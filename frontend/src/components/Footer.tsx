@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
             <br />
             <a
               className='text-body text-decoration-none '
-              href='https://github.com/fanischam/AI-office-assistant'
+              href='https://github.com/fanischam/AI-office-assistant-microservices'
             >
               <FaGithub />
             </a>
