@@ -1,19 +1,20 @@
-import { getGPTResponse } from '../middleware/openaiMiddleware';
-import {
-  extractAppointmentDetails,
-  createAppointment,
-  getAppointments,
-} from './appointmentService';
+import { getLangChainResponse } from '../middleware/langChainMiddleware';
+import { extractAppointmentDetails } from '../utils/appointmentUtils';
+import { createAppointment, getAppointments } from './appointmentService';
 
 export const processAppointmentPrompt = async (
   prompt: string,
   userId: string,
   jwtToken: string
 ) => {
-  const gptResponse = await getGPTResponse(prompt);
+  const response = await getLangChainResponse(prompt, userId);
 
-  if (gptResponse.toLowerCase().includes('book appointment')) {
-    const appointmentDetails = extractAppointmentDetails(gptResponse);
+  if (
+    response.toLowerCase().includes('book appointment') &&
+    (prompt.toLowerCase().includes('yes') ||
+      prompt.toLowerCase().includes('confirm'))
+  ) {
+    const appointmentDetails = extractAppointmentDetails(response);
     if (appointmentDetails && !('error' in appointmentDetails)) {
       const { title, participant, participantPhoneNumber, date } =
         appointmentDetails;
@@ -57,7 +58,7 @@ export const processAppointmentPrompt = async (
   }
 
   return {
-    response:
-      'My purpose is only to book new appointments for you and provide you with details about your appointments for today, tomorrow, this week, or next week. For now, I do not have other functionalities.',
+    response: response,
+    // 'My purpose is only to book new appointments for you and provide you with details about your appointments for today, tomorrow, this week, or next week. For now, I do not have other functionalities.',
   };
 };

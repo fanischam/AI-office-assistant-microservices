@@ -21,11 +21,14 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "@langchain/core": "^0.3.40",
+    "@langchain/langgraph": "^0.2.48",
     "axios": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
-    "openai": "^4.68.1"
+    "langchain": "^0.3.19",
+    "uuid": "^11.1.0"
   }
 }
