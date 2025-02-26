@@ -8,7 +8,7 @@ interface MessageProps {
 
 const ChatMessage: React.FC<MessageProps> = ({ text, sender }) => {
   const formatText = (text: string) => {
-    return text.split('\n').map((line, i) => (
+    return text?.split('\n').map((line, i) => (
       <React.Fragment key={i}>
         {line}
         {i < text.split('\n').length - 1 && <br />}
