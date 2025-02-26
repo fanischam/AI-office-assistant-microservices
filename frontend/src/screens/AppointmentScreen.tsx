@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, Button, Form, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import {
@@ -49,6 +49,10 @@ const AppointmentsScreen: React.FC = () => {
     );
     setShowModal(true);
   };
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   const handleCloseModal = () => {
     setShowModal(false);
