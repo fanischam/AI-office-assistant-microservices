@@ -7,6 +7,15 @@ interface MessageProps {
 }
 
 const ChatMessage: React.FC<MessageProps> = ({ text, sender }) => {
+  const formatText = (text: string) => {
+    return text.split('\n').map((line, i) => (
+      <React.Fragment key={i}>
+        {line}
+        {i < text.split('\n').length - 1 && <br />}
+      </React.Fragment>
+    ));
+  };
+
   return (
     <div
       className={`message d-flex ${
@@ -18,7 +27,8 @@ const ChatMessage: React.FC<MessageProps> = ({ text, sender }) => {
           sender === 'user' ? 'bg-primary' : 'bg-secondary'
         }`}
       >
-        <strong>{sender === 'user' ? 'You' : 'Assistant'}:</strong> {text}
+        <strong>{sender === 'user' ? 'You' : 'Assistant'}:</strong>{' '}
+        {formatText(text)}
       </div>
     </div>
   );
