@@ -1,23 +1,18 @@
 import { textToSpeech } from '../middlewares/textToSpeechMiddleware';
+import { logout } from '../slices/authSlice';
 import { useSendPromptMutation } from '../slices/chatbotApiSlice';
+import { NavigateFunction } from 'react-router-dom';
 import { formatDate } from './dateUtils';
-
-export interface Message {
-  text: string;
-  sender: 'user' | 'bot';
-}
-
-interface Appointment {
-  title: string;
-  participant: string;
-  participantPhoneNumber: number;
-  date: Date;
-}
+import { toast } from 'react-toastify';
+import { Dispatch } from '@reduxjs/toolkit';
+import { Appointment, Message } from '../types/types';
 
 export const processUserMessage = async (
   message: string,
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>,
-  sendPrompt: ReturnType<typeof useSendPromptMutation>[0]
+  sendPrompt: ReturnType<typeof useSendPromptMutation>[0],
+  dispatch: Dispatch,
+  navigate: NavigateFunction
 ) => {
   if (!message) return;
 
@@ -66,6 +61,12 @@ export const processUserMessage = async (
 
     setMessages((prevMessages) => [...prevMessages, botMessage]);
   } catch (error: any) {
+    if (error.originalStatus === 401) {
+      dispatch(logout());
+      navigate('/');
+      toast.info('Token expired, please log in again');
+    }
+
     console.error('Error sending prompt to the backend', error);
     const botMessage: Message = {
       text:

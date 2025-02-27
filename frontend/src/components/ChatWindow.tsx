@@ -1,13 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ChatMessage from './ChatMessage';
 import ChatInput from './ChatInput';
 import { Card } from 'react-bootstrap';
-import { processUserMessage, Message as MessageType } from '../utils/chatUtils';
+import { processUserMessage } from '../utils/chatUtils';
 import { useSendPromptMutation } from '../slices/chatbotApiSlice';
+import { useDispatch } from 'react-redux';
+import { Message } from '../types/types';
 
 const ChatWindow: React.FC = () => {
-  const [messages, setMessages] = useState<MessageType[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [sendPrompt] = useSendPromptMutation();
 
   const scrollToBottom = () => {
@@ -22,7 +27,7 @@ const ChatWindow: React.FC = () => {
   }, [messages]);
 
   const handleSendMessage = (message: string) => {
-    processUserMessage(message, setMessages, sendPrompt);
+    processUserMessage(message, setMessages, sendPrompt, dispatch, navigate);
   };
 
   return (
