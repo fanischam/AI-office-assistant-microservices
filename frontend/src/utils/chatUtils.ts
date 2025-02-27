@@ -1,10 +1,7 @@
 import { textToSpeech } from '../middlewares/textToSpeechMiddleware';
 import { logout } from '../slices/authSlice';
-import { useSendPromptMutation } from '../slices/chatbotApiSlice';
-import { NavigateFunction } from 'react-router-dom';
 import { formatDate } from './dateUtils';
 import { toast } from 'react-toastify';
-import { Dispatch } from '@reduxjs/toolkit';
 import { Appointment, Message, ProcessUserMessage } from '../types/types';
 
 export const processUserMessage = async ({
@@ -46,7 +43,7 @@ export const processUserMessage = async ({
             const { title, participant, participantPhoneNumber, date } =
               appointment;
             return `• ${title} appointment with ${participant} on ${formatDate(
-              date
+              new Date(date)
             )}.\n  Phone: ${participantPhoneNumber}`;
           })
           .join('\n\n');
@@ -64,7 +61,7 @@ export const processUserMessage = async ({
     if (error.originalStatus === 401) {
       dispatch(logout());
       navigate('/');
-      toast.info('Token expired, please log in again');
+      toast.info('Invalid session. Please log in again');
     }
 
     console.error('Error sending prompt to the backend', error);

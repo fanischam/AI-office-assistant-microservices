@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useLogoutMutation } from '../slices/userApiSlice';
 import { Table, Button, Form, Modal, Pagination } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import {
@@ -9,22 +12,34 @@ import {
 } from '../slices/appointmentApiSlice';
 import Loader from '../components/Loader';
 import { formatDateForInput } from '../utils/dateUtils';
-
-interface Appointment {
-  _id: string;
-  title: string;
-  participant: string;
-  participantPhoneNumber: number;
-  date: string;
-}
+import { Appointment } from '../types/types';
+import { logout } from '../slices/authSlice';
 
 const AppointmentsScreen: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [logoutApiCall] = useLogoutMutation();
   const [page, setPage] = useState(1);
   const {
     data: paginatedData,
     isLoading,
     refetch,
+    error,
   } = useGetAppointmentsQuery(page);
+
+  const handleError = async () => {
+    await logoutApiCall({}).unwrap();
+    dispatch(logout());
+    navigate('/');
+    toast.info('Invalid session. Please login again');
+  };
+
+  useEffect(() => {
+    if (error) {
+      handleError();
+    }
+  }, [error]);
 
   const [createAppointment] = useCreateAppointmentMutation();
   const [updateAppointment] = useUpdateAppointmentMutation();
@@ -143,7 +158,7 @@ const AppointmentsScreen: React.FC = () => {
                   </Button>
                   <Button
                     variant='danger'
-                    onClick={() => handleDelete(appointment._id)}
+                    onClick={() => handleDelete(appointment._id!)}
                   >
                     Delete
                   </Button>

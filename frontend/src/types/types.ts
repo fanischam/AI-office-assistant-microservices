@@ -8,10 +8,11 @@ export interface Message {
 }
 
 export interface Appointment {
+  _id?: string;
   title: string;
   participant: string;
   participantPhoneNumber: number;
-  date: Date;
+  date: string;
 }
 
 export interface ProcessUserMessage {
