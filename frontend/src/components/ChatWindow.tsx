@@ -27,7 +27,13 @@ const ChatWindow: React.FC = () => {
   }, [messages]);
 
   const handleSendMessage = (message: string) => {
-    processUserMessage(message, setMessages, sendPrompt, dispatch, navigate);
+    processUserMessage({
+      message,
+      setMessages,
+      sendPrompt,
+      dispatch,
+      navigate,
+    });
   };
 
   return (

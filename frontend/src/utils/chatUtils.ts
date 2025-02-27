@@ -5,15 +5,15 @@ import { NavigateFunction } from 'react-router-dom';
 import { formatDate } from './dateUtils';
 import { toast } from 'react-toastify';
 import { Dispatch } from '@reduxjs/toolkit';
-import { Appointment, Message } from '../types/types';
+import { Appointment, Message, ProcessUserMessage } from '../types/types';
 
-export const processUserMessage = async (
-  message: string,
-  setMessages: React.Dispatch<React.SetStateAction<Message[]>>,
-  sendPrompt: ReturnType<typeof useSendPromptMutation>[0],
-  dispatch: Dispatch,
-  navigate: NavigateFunction
-) => {
+export const processUserMessage = async ({
+  message,
+  setMessages,
+  sendPrompt,
+  dispatch,
+  navigate,
+}: ProcessUserMessage) => {
   if (!message) return;
 
   const userMessage: Message = { text: message, sender: 'user' };
