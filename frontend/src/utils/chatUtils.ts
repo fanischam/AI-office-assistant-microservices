@@ -69,9 +69,8 @@ export const processUserMessage = async (
     console.error('Error sending prompt to the backend', error);
     const botMessage: Message = {
       text:
-        error.message ||
         'There must be something wrong with your appointment details, please make sure that you specify a participant,' +
-          'his phone number, the reason of the appointment and the date in a format like Tuesday 20th of August at 11:00.',
+        "participant's phone number, the reason of the appointment and the date.",
       sender: 'bot',
     };
 
