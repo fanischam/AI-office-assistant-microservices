@@ -1,10 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { USERS_URL } from '../constants';
+// import { USERS_URL } from '../constants';
 
 export const userApiSlice = createApi({
   reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: USERS_URL,
+    baseUrl: process.env.USERS_URL,
     credentials: 'include',
   }),
   tagTypes: ['User'],

@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { APPOINTMENTS_URL } from '../constants';
+// import { APPOINTMENTS_URL } from '../constants';
 import { PaginatedResponse } from '../types/types';
 
 export const appointmentApiSlice = createApi({
   reducerPath: 'appointmentApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: APPOINTMENTS_URL,
+    baseUrl: process.env.APPOINTMENTS_URL,
     credentials: 'include',
   }),
   tagTypes: ['Appointment'],
