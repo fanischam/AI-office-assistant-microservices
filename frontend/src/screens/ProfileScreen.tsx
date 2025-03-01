@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Form, Button, Row, Col, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { ErrorResponse, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loader from '../components/Loader';
 import {
@@ -59,9 +59,16 @@ const ProfileScreen = () => {
         }).unwrap();
         dispatch(setCredentials({ ...res }));
         toast.success('Profile updated successfully');
-        setShowUpdateModal(false); // Close the modal after success
-      } catch (err: any) {
-        toast.error(err?.data?.message || err.error);
+        setShowUpdateModal(false);
+      } catch (error: any) {
+        if (error.originalStatus === 401) {
+          dispatch(logout());
+          navigate('/login');
+          toast.error('Session expired. Please login again');
+        } else {
+          toast.error('An error occured');
+          console.error(error?.data || 'An error occurred');
+        }
       }
     }
   };
@@ -72,9 +79,16 @@ const ProfileScreen = () => {
       dispatch(logout());
       navigate('/login');
       toast.success('Profile deleted successfully');
-      setShowDeleteModal(false); // Close the modal after success
+      setShowDeleteModal(false);
     } catch (error: any) {
-      toast.error(error.data?.message || 'Error deleting profile');
+      if (error.originalStatus === 401) {
+        dispatch(logout());
+        navigate('/login');
+        toast.error('Session expired. Please login again');
+      } else {
+        toast.error('An error occured');
+        console.error(error?.data || 'An error occurred');
+      }
     }
   };
 

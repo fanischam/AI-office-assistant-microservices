@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useLogoutMutation } from '../slices/userApiSlice';
 import { Table, Button, Form, Modal, Pagination } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import {
@@ -21,7 +20,6 @@ const AppointmentsScreen: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [logoutApiCall] = useLogoutMutation();
   const {
     data: paginatedData,
     isLoading,
@@ -32,21 +30,28 @@ const AppointmentsScreen: React.FC = () => {
     refetchOnReconnect: false,
   });
 
-  const handleError = useCallback(async () => {
-    try {
-      await logoutApiCall({}).unwrap();
-      dispatch(logout());
-      navigate('/');
-      toast.info('Invalid session. Please login again');
-    } catch (error) {
-      console.log(error);
-    }
-  }, [logoutApiCall, dispatch, navigate]);
+  const handleError = useCallback(
+    async (error: any) => {
+      try {
+        if (error.originalStatus === 401) {
+          dispatch(logout());
+          navigate('/login');
+          toast.error('Invalid session. Please login again');
+        } else {
+          toast.error('An error occured');
+          console.error(error?.data || 'An error occurred');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [dispatch, navigate]
+  );
 
   useEffect(() => {
     if (error) {
       console.log('Error:', error);
-      handleError();
+      handleError(error);
     }
   }, [error, handleError]);
 
