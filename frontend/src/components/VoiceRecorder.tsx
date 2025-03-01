@@ -2,10 +2,7 @@ import React, { useEffect, useRef, useCallback } from 'react';
 import { Button } from 'react-bootstrap';
 import { FaMicrophone, FaStop } from 'react-icons/fa';
 import useVoiceRecorder from '../hooks/useVoiceRecorder';
-
-interface VoiceRecorderProps {
-  onAudioRecorded: (audioUrl: string) => void;
-}
+import { VoiceRecorderProps } from '../types/types';
 
 const VoiceRecorder: React.FC<VoiceRecorderProps> = ({ onAudioRecorded }) => {
   const { isRecording, audioUrl, startRecording, stopRecording } =

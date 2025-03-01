@@ -4,7 +4,7 @@ import { useSendPromptMutation } from '../slices/chatbotApiSlice';
 
 export interface Message {
   text: string;
-  sender: 'user' | 'bot';
+  sender: SenderType;
 }
 
 export interface Appointment {
@@ -29,4 +29,44 @@ export interface ProcessUserMessage {
   sendPrompt: ReturnType<typeof useSendPromptMutation>[0];
   dispatch: Dispatch;
   navigate: NavigateFunction;
+}
+
+export interface UserInfo {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface AuthState {
+  userInfo: UserInfo | null;
+}
+
+export interface MessageProps {
+  text: string;
+  sender: SenderType;
+}
+
+export interface InputFieldProps {
+  onSendMessage: (message: string) => void;
+}
+
+export interface UseVoiceRecorderResponse {
+  isRecording: boolean;
+  audioUrl: string | null;
+  startRecording: () => Promise<void>;
+  stopRecording: () => void;
+}
+
+type SenderType = 'user' | 'bot';
+
+export interface VoiceRecorderProps {
+  onAudioRecorded: (audioUrl: string) => void;
+}
+
+export interface LogoProps {
+  logoSrc: string;
+}
+
+export interface FormContainerProps {
+  children: React.ReactNode;
 }

@@ -2,10 +2,7 @@ import React, { useState } from 'react';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
 import VoiceRecorder from './VoiceRecorder';
 import { speechRecognitionMiddleware } from '../middlewares/speechRecognitionMiddleware';
-
-interface InputFieldProps {
-  onSendMessage: (message: string) => void;
-}
+import { InputFieldProps } from '../types/types';
 
 const ChatInput: React.FC<InputFieldProps> = ({ onSendMessage }) => {
   const [input, setInput] = useState('');

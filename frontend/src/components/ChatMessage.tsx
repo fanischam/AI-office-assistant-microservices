@@ -1,10 +1,5 @@
 import React from 'react';
-import { Message as MessageType } from '../utils/chatUtils';
-
-interface MessageProps {
-  text: string;
-  sender: MessageType['sender'];
-}
+import { MessageProps } from '../types/types';
 
 const ChatMessage: React.FC<MessageProps> = ({ text, sender }) => {
   const formatText = (text: string) => {

@@ -1,13 +1,7 @@
 import { useState, useRef } from 'react';
+import { UseVoiceRecorderResponse } from '../types/types';
 
-interface UseVoiceRecorderReturn {
-  isRecording: boolean;
-  audioUrl: string | null;
-  startRecording: () => Promise<void>;
-  stopRecording: () => void;
-}
-
-const useVoiceRecorder = (): UseVoiceRecorderReturn => {
+const useVoiceRecorder = (): UseVoiceRecorderResponse => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);

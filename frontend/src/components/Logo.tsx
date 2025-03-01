@@ -1,9 +1,6 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-
-interface LogoProps {
-  logoSrc: string;
-}
+import { LogoProps } from '../types/types';
 
 const Logo: React.FC<LogoProps> = ({ logoSrc }) => {
   return (
