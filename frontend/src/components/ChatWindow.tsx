@@ -9,7 +9,12 @@ import { useDispatch } from 'react-redux';
 import { Message } from '../types/types';
 
 const ChatWindow: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      text: 'Welcome to Office Assistant! I can help you schedule and manage appointments, and check upcoming events. How can I help you today?',
+      sender: 'bot',
+    },
+  ]);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
