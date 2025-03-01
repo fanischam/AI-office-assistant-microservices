@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useLogoutMutation } from '../slices/userApiSlice';
@@ -16,30 +16,39 @@ import { Appointment } from '../types/types';
 import { logout } from '../slices/authSlice';
 
 const AppointmentsScreen: React.FC = () => {
+  const [page, setPage] = useState(1);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [logoutApiCall] = useLogoutMutation();
-  const [page, setPage] = useState(1);
   const {
     data: paginatedData,
     isLoading,
-    refetch,
     error,
-  } = useGetAppointmentsQuery(page);
+  } = useGetAppointmentsQuery(page, {
+    refetchOnMountOrArgChange: true,
+    refetchOnFocus: false,
+    refetchOnReconnect: false,
+  });
 
-  const handleError = async () => {
-    await logoutApiCall({}).unwrap();
-    dispatch(logout());
-    navigate('/');
-    toast.info('Invalid session. Please login again');
-  };
+  const handleError = useCallback(async () => {
+    try {
+      await logoutApiCall({}).unwrap();
+      dispatch(logout());
+      navigate('/');
+      toast.info('Invalid session. Please login again');
+    } catch (error) {
+      console.log(error);
+    }
+  }, [logoutApiCall, dispatch, navigate]);
 
   useEffect(() => {
     if (error) {
+      console.log('Error:', error);
       handleError();
     }
-  }, [error]);
+  }, [error, handleError]);
 
   const [createAppointment] = useCreateAppointmentMutation();
   const [updateAppointment] = useUpdateAppointmentMutation();
@@ -51,36 +60,32 @@ const AppointmentsScreen: React.FC = () => {
     Partial<Appointment>
   >({});
 
-  const handlePageChange = (newPage: number) => {
+  const handlePageChange = useCallback((newPage: number) => {
     setPage(newPage);
-  };
+  }, []);
 
-  const handleShowModal = (
-    type: 'create' | 'edit',
-    appointment?: Appointment
-  ) => {
-    setModalType(type);
-    setCurrentAppointment(
-      appointment
-        ? {
-            ...appointment,
-            date: formatDateForInput(appointment.date),
-          }
-        : {}
-    );
-    setShowModal(true);
-  };
+  const handleShowModal = useCallback(
+    (type: 'create' | 'edit', appointment?: Appointment) => {
+      setModalType(type);
+      setCurrentAppointment(
+        appointment
+          ? {
+              ...appointment,
+              date: formatDateForInput(appointment.date),
+            }
+          : {}
+      );
+      setShowModal(true);
+    },
+    []
+  );
 
-  useEffect(() => {
-    refetch();
-  }, [refetch, page]);
-
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setShowModal(false);
     setCurrentAppointment({});
-  };
+  }, []);
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     const { title, participant, participantPhoneNumber, date } =
       currentAppointment;
 
@@ -102,24 +107,25 @@ const AppointmentsScreen: React.FC = () => {
         await updateAppointment(currentAppointment).unwrap();
         toast.success('Appointment updated successfully');
       }
-      refetch();
       handleCloseModal();
     } catch (error: any) {
       toast.error(error.data?.message || 'Error saving appointment');
     }
-  };
+  }, [currentAppointment, modalType, createAppointment, updateAppointment]);
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this appointment?')) {
-      try {
-        await deleteAppointment(id).unwrap();
-        toast.success('Appointment deleted successfully');
-        refetch();
-      } catch (error: any) {
-        toast.error(error.data?.message || 'Error deleting appointment');
+  const handleDelete = useCallback(
+    async (id: string) => {
+      if (window.confirm('Are you sure you want to delete this appointment?')) {
+        try {
+          await deleteAppointment(id).unwrap();
+          toast.success('Appointment deleted successfully');
+        } catch (error: any) {
+          toast.error(error.data?.message || 'Error deleting appointment');
+        }
       }
-    }
-  };
+    },
+    [deleteAppointment]
+  );
 
   return (
     <>

@@ -13,6 +13,14 @@ export interface Appointment {
   participant: string;
   participantPhoneNumber: number;
   date: string;
+  user?: string;
+}
+
+export interface PaginatedResponse {
+  appointments: Appointment[];
+  currentPage: number;
+  totalPages: number;
+  totalAppointments: number;
 }
 
 export interface ProcessUserMessage {
