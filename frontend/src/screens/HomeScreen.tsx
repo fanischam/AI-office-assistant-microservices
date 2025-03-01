@@ -32,12 +32,11 @@ const HomePage: React.FC = () => {
         authentication is handled server-side with an HttpOnly cookie to protect
         the token, while client-side code uses RTK Query (or fetch/axios) to
         make calls. If a 401 error occurs, the app dispatches a logout action
-        and redirects to the login screen. Docker and RabbitMQ are employed for
-        deployment and messaging among services, allowing the system to remain
-        scalable. Overall, the app provides a single interface for scheduling,
-        managing, and checking appointments, alongside an interactive AI
-        assistant that can respond to text or voice, making office tasks more
-        streamlined and efficient.
+        and redirects to the login screen. Docker is used for deployment,
+        allowing the system to remain scalable. Overall, the app provides a
+        single interface for scheduling, managing, and checking appointments,
+        alongside an interactive AI assistant that can respond to text or voice,
+        making office tasks more streamlined and efficient.
       </p>
       <Button variant='dark' size='lg' className='mb-5' onClick={handleClick}>
         {userInfo ? 'Chat Now' : 'Login'}
