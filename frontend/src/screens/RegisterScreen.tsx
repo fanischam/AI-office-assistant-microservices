@@ -41,6 +41,10 @@ const RegisterScreen: React.FC = () => {
       toast.error('Please provide a name');
     }
 
+    if (!email) {
+      toast.error('Please provide an email address');
+    }
+
     if (!PASSWORD_REGEX.test(password)) {
       toast.error(
         'Password must be at least 8 characters long, include one uppercase letter, one lowercase letter, one digit, and one special character.'
@@ -56,7 +60,7 @@ const RegisterScreen: React.FC = () => {
         dispatch(setCredentials({ ...res }));
         navigate(redirect);
       } catch {
-        toast.error('Could not contact server');
+        toast.error('Could not register user');
         // toast.error(error?.data?.message || error.error);
       }
     }
