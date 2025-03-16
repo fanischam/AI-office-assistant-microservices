@@ -34,7 +34,7 @@ const RegisterScreen: React.FC = () => {
     }
   }, [navigate, redirect, userInfo]);
 
-  const submitHandler = async (e: any) => {
+  const submitHandler = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!name) {
@@ -55,7 +55,7 @@ const RegisterScreen: React.FC = () => {
         const res = await register({ name, email, password }).unwrap();
         dispatch(setCredentials({ ...res }));
         navigate(redirect);
-      } catch (error: any) {
+      } catch {
         toast.error('Could not contact server');
         // toast.error(error?.data?.message || error.error);
       }
