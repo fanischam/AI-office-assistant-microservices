@@ -61,7 +61,6 @@ const RegisterScreen: React.FC = () => {
         navigate(redirect);
       } catch {
         toast.error('Could not register user');
-        // toast.error(error?.data?.message || error.error);
       }
     }
   };
