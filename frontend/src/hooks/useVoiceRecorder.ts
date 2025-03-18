@@ -25,32 +25,6 @@ const useVoiceRecorder = (): UseVoiceRecorderResponse => {
       audioContextRef.current = audioContext;
       analyserRef.current = analyser;
 
-      const detectSilence = () => {
-        const bufferLength = analyser.fftSize;
-        const dataArray = new Uint8Array(bufferLength);
-        analyser.getByteTimeDomainData(dataArray);
-
-        let sumSquares = 0.0;
-        for (const amplitude of dataArray) {
-          const normalizedAmplitude = amplitude / 128.0 - 1.0;
-          sumSquares += normalizedAmplitude * normalizedAmplitude;
-        }
-
-        const signalEnergy = Math.sqrt(sumSquares / bufferLength);
-
-        const silenceThreshold = 0.01; // Adjust this threshold based on testing
-        if (signalEnergy < silenceThreshold) {
-          if (!silenceTimerRef.current) {
-            silenceTimerRef.current = window.setTimeout(() => {
-              stopRecording();
-            }, 3000); // Stop recording after 3 seconds of silence
-          }
-        } else if (silenceTimerRef.current) {
-          clearTimeout(silenceTimerRef.current);
-          silenceTimerRef.current = null;
-        }
-      };
-
       mediaRecorder.ondataavailable = (event) => {
         audioChunksRef.current.push(event.data);
       };
@@ -74,7 +48,6 @@ const useVoiceRecorder = (): UseVoiceRecorderResponse => {
 
       const processAudio = () => {
         if (isRecording && analyserRef.current) {
-          detectSilence();
           requestAnimationFrame(processAudio);
         }
       };

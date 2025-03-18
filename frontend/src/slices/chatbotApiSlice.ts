@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-// import { CHATBOT_URL } from '../constants';
 
 export const chatbotApiSlice = createApi({
   reducerPath: 'chatbotApi',

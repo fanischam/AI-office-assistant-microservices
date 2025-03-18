@@ -19,7 +19,7 @@ export const processUserMessage = async ({
   try {
     const response = await sendPrompt({ prompt: message }).unwrap();
 
-    let botMessage: Message = {
+    const botMessage: Message = {
       text: 'You have no appointments',
       sender: 'bot',
     };
@@ -30,7 +30,7 @@ export const processUserMessage = async ({
         : response.appointments.appointments || [];
 
       if (appointments.length === 0) {
-        botMessage.text = 'You have no appointments for this period.';
+        botMessage.text = 'You have no appointments for this period of time.';
       } else {
         const periodDescription = response.appointments.description
           ? `Here are your ${response.appointments.description}:\n\n`
@@ -57,6 +57,7 @@ export const processUserMessage = async ({
     textToSpeech(botMessage.text);
 
     setMessages((prevMessages) => [...prevMessages, botMessage]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error.originalStatus === 401) {
       dispatch(logout());

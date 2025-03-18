@@ -9,8 +9,8 @@ body {
 
 .footer {
   background-color: rgb(165, 164, 164);
-  position: absolute;
-  bottom: 0;
+  /* position: absolute;
+  bottom: 0; */
   width: 100%;
 }
 

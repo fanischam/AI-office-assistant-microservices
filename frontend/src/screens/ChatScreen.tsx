@@ -11,7 +11,7 @@ const ChatScreen: React.FC = () => {
   const navigate = useNavigate();
   useEffect(() => {
     navigate(userInfo ? '/chat' : '/login');
-  }, [userInfo]);
+  }, [navigate, userInfo]);
 
   return (
     <Container className='chat d-flex flex-column justify-content-center align-items-center my-5'>
