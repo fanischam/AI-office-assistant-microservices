@@ -116,7 +116,13 @@ const AppointmentsScreen: React.FC = () => {
     } catch (error: any) {
       toast.error(error.data?.message || 'Error saving appointment');
     }
-  }, [currentAppointment, modalType, createAppointment, updateAppointment]);
+  }, [
+    currentAppointment,
+    modalType,
+    handleCloseModal,
+    createAppointment,
+    updateAppointment,
+  ]);
 
   const handleDelete = useCallback(
     async (id: string) => {
