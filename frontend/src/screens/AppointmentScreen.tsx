@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -24,6 +25,7 @@ const AppointmentsScreen: React.FC = () => {
     data: paginatedData,
     isLoading,
     error,
+    refetch,
   } = useGetAppointmentsQuery(page, {
     refetchOnMountOrArgChange: true,
     refetchOnFocus: false,
@@ -113,6 +115,7 @@ const AppointmentsScreen: React.FC = () => {
         toast.success('Appointment updated successfully');
       }
       handleCloseModal();
+      refetch();
     } catch (error: any) {
       toast.error(error.data?.message || 'Error saving appointment');
     }
@@ -120,6 +123,7 @@ const AppointmentsScreen: React.FC = () => {
     currentAppointment,
     modalType,
     handleCloseModal,
+    refetch,
     createAppointment,
     updateAppointment,
   ]);
@@ -130,12 +134,13 @@ const AppointmentsScreen: React.FC = () => {
         try {
           await deleteAppointment(id).unwrap();
           toast.success('Appointment deleted successfully');
+          refetch();
         } catch (error: any) {
           toast.error(error.data?.message || 'Error deleting appointment');
         }
       }
     },
-    [deleteAppointment]
+    [deleteAppointment, refetch]
   );
 
   return (
