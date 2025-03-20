@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import { Form, Button, Row, Col, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,7 +34,7 @@ const ProfileScreen = () => {
       setName(userInfo.name);
       setEmail(userInfo.email);
     }
-  }, [userInfo?.email, userInfo?.name]);
+  }, [userInfo, userInfo?.email, userInfo?.name]);
 
   const dispatch = useDispatch();
 

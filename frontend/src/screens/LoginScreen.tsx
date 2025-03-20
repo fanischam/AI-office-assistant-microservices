@@ -28,15 +28,15 @@ const LoginScreen: React.FC = () => {
     if (userInfo) {
       navigate(redirect);
     }
-  }, [userInfo, redirect]);
+  }, [userInfo, redirect, navigate]);
 
-  const submitHandler = async (e: any) => {
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
       navigate(redirect);
-    } catch (error: any) {
+    } catch {
       toast.error('Invalid email or password');
     }
   };
