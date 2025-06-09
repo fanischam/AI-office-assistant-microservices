@@ -39,10 +39,12 @@ const RegisterScreen: React.FC = () => {
 
     if (!name) {
       toast.error('Please provide a name');
+      return;
     }
 
     if (!email) {
       toast.error('Please provide an email address');
+      return;
     }
 
     if (!PASSWORD_REGEX.test(password)) {
@@ -54,6 +56,7 @@ const RegisterScreen: React.FC = () => {
 
     if (password !== confirmPassword) {
       toast.error('Passwords do not match');
+      return;
     } else {
       try {
         const res = await register({ name, email, password }).unwrap();

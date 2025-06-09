@@ -34,7 +34,7 @@ const ProfileScreen = () => {
       setName(userInfo.name);
       setEmail(userInfo.email);
     }
-  }, [userInfo, userInfo?.email, userInfo?.name]);
+  }, [userInfo]);
 
   const dispatch = useDispatch();
 
@@ -75,8 +75,13 @@ const ProfileScreen = () => {
   };
 
   const handleDeleteClick = async () => {
+    if (!userInfo) {
+      toast.error('User information not found');
+      return;
+    }
+    
     try {
-      await deleteProfile({ id: userInfo?.id }).unwrap();
+      await deleteProfile({ id: userInfo.id }).unwrap();
       dispatch(logout());
       navigate('/login');
       toast.success('Profile deleted successfully');

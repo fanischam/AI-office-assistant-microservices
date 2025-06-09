@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../types/storeTypes';
 
-const HomePage: React.FC = () => {
+const HomeScreen: React.FC = () => {
   const { userInfo } = useSelector((state: RootState) => state.auth);
 
   const navigate = useNavigate();
@@ -45,4 +45,4 @@ const HomePage: React.FC = () => {
   );
 };
 
-export default HomePage;
+export default HomeScreen;

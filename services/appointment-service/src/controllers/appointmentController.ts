@@ -181,6 +181,7 @@ const updateAppointment = asyncHandler(
 
       res.json({
         _id: updatedAppointment._id,
+        title: updatedAppointment.title,
         participant: updatedAppointment.participant,
         participantPhoneNumber: updatedAppointment.participantPhoneNumber,
         date: updatedAppointment.date,
