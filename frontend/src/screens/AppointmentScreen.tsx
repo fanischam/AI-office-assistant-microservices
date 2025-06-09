@@ -107,11 +107,16 @@ const AppointmentsScreen: React.FC = () => {
     }
 
     try {
+      const appointmentData = {
+        ...currentAppointment,
+        date: new Date(date).toISOString()
+      };
+
       if (modalType === 'create') {
-        await createAppointment(currentAppointment).unwrap();
+        await createAppointment(appointmentData).unwrap();
         toast.success('Appointment created successfully');
       } else {
-        await updateAppointment(currentAppointment).unwrap();
+        await updateAppointment(appointmentData).unwrap();
         toast.success('Appointment updated successfully');
       }
       handleCloseModal();
