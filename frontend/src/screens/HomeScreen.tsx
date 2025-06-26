@@ -21,7 +21,7 @@ const HomeScreen: React.FC = () => {
         a React and TypeScript frontend that displays a chatbot interface where
         users can interact with an AI-powered assistant. On the backend,
         microservices in Node.js manage various features, including appointment
-        scheduling, Google Calendar integration, and user authentication. The
+        scheduling, appointment retrieval and user authentication. The
         frontend includes a Home screen that checks if a user is logged in or
         not (looking for a valid JWT stored in a secure cookie), a Chat screen
         where the user can send prompts or queries to the AI bot, and an
@@ -30,7 +30,7 @@ const HomeScreen: React.FC = () => {
         can also perform text-to-speech conversion, handle voice commands via
         speech recognition, and display upcoming meetings or tasks. JWT
         authentication is handled server-side with an HttpOnly cookie to protect
-        the token, while client-side code uses RTK Query (or fetch/axios) to
+        the token, while client-side code uses RTK Query to
         make calls. If a 401 error occurs, the app dispatches a logout action
         and redirects to the login screen. Docker is used for deployment,
         allowing the system to remain scalable. Overall, the app provides a
